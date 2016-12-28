@@ -1,0 +1,23 @@
+version: '2'
+services:
+    zookeeper:
+        image: jplock/zookeeper:3.4.6
+        ports:
+            - "2181:2181"
+    kafka:
+        image: ches/kafka
+        links:
+            - zookeeper:zookeeper
+        environment:
+            - ZOOKEEPER_IP=zookeeper
+        ports:
+            - "7203:7203"
+            - "9092:9092"
+    kafka-manager:
+        image: sheepkiller/kafka-manager
+        ports:
+            - "9000:9000"
+        links:
+            - zookeeper
+        environment:
+            - ZK_HOSTS=zookeeper:2181
